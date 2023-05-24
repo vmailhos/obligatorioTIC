@@ -6,8 +6,10 @@
 #include "minish.h"
 
 
-int main(){
-    while(1){
-        
-    }
+int main(int argc, char *argv[]){
+    char *linea = "aaaa bbbb ccc       \n";
+    linea2argv(linea, argc, argv);
+    /*while(1){
+        fprintf(stderr, "Mensaje de prompt en standard error: \n");   //para borrar
+    }*/
 }
