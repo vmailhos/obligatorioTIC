@@ -4,11 +4,12 @@
 
 #include "wrappers.h"
 #include "minish.h"
+#define MAXLINE 1024
 
+int main(void){
+    char input[MAXLINE];
+    fgets(input, MAXLINE, stdin);
 
-int main(int argc, char *argv[]){
-    char *linea = "aaaa bbbb ccc       \n";
-    linea2argv(linea, argc, argv);
     /*while(1){
         fprintf(stderr, "Mensaje de prompt en standard error: \n");   //para borrar
     }*/
