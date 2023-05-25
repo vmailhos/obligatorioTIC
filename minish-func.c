@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <pwd.h>
+#include <unistd.h>
+#include <sys/types.h>
+
 #include "minish.h"
 #include "wrappers.h"
 #define IN 1
@@ -49,9 +53,17 @@ int builtin_pid(int argc, char **argv) {
     printf("Process ID: %d\n", getpid());
     return 0;
 }
+
 int builtin_uid (int argc, char ** argv){
-    return NULL;
+    uid_t uid = getuid();
+    struct passwd *pwd = getpwuid(uid);
+
+    printf("User ID: %d\n", uid);
+    printf("Username: %s\n", pwd->pw_name);
+
+    return 0;
 }
+
 int builtin_unsetenv (int argc, char ** argv){
     return NULL;
 }

@@ -13,6 +13,7 @@
 
 int builtin_exit(int argc, char **argv);
 int builtin_pid(int argc, char **argv);
+int builtin_uid (int argc, char ** argv);
 
 
 int main(void){ //hay que manejar errores tambien
@@ -36,9 +37,13 @@ int main(void){ //hay que manejar errores tambien
         if (argc > 0 && strcmp(argv[0], "exit") == 0) {
             builtin_exit(argc, argv);
         }
-        
+
         if (argc > 0 && strcmp(argv[0], "pid") == 0) {
             builtin_pid(argc, argv);
+        }
+        
+        if (argc > 0 && strcmp(argv[0], "uid") == 0) {
+            builtin_uid(argc, argv);
         }
     }
     return 0;
