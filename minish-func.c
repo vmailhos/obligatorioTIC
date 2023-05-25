@@ -44,8 +44,10 @@ int builtin_gid (int argc, char ** argv){
 int builtin_setenv (int argc, char ** argv){
     return NULL;
 }
-int builtin_pid (int argc, char ** argv){
-    return NULL;
+int builtin_pid(int argc, char **argv) {
+    
+    printf("Process ID: %d\n", getpid());
+    return 0;
 }
 int builtin_uid (int argc, char ** argv){
     return NULL;
