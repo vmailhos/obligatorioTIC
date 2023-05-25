@@ -8,22 +8,19 @@
 #include "wrappers.h"
 #include "minish.h"
 
+#define MAXLINE 1024
 #define PATH_MAX 4096
 
-
-int main(void){ //hay que manejar errores tambien 
+int main(void){ //hay que manejar errores tambien
     uid_t uid = getuid();
     struct passwd *pwd = getpwuid(uid);
     char *username= pwd->pw_name;
     char path[PATH_MAX];    
     char *directorio = getcwd(path, sizeof(path));
+    char input[MAXLINE];
 
     while (1){
-        fprintf(stderr, "(minish) %s:%s\n",username, directorio); 
+        fprintf(stderr, "(minish) %s:%s\n",username, directorio);
+        fgets(input, MAXLINE, stdin);
     }
-    //char *linea = "aaaa bbbb ccc       \n";
-    //linea2argv(linea, argc, argv);
-    /*while(1){
-        fprintf(stderr, "Mensaje de prompt en standard error: \n");   //para borrar
-    }*/
 }

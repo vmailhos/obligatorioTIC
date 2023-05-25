@@ -82,3 +82,14 @@ int linea2argv(char *linea, int argc, char **argv){
     }
     return wordcount;
 }
+
+int getLinea(){
+    char* input = malloc_or_exit(MAXLINE);
+
+    fprintf(stderr, "(nombre1)(algo?)");
+    fgets(input, MAXLINE, stdin);
+
+    printf("You entered: %s\n", input);
+    return input;
+    //cntD hace que fgets devuelva el fin del archivo
+}

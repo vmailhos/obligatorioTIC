@@ -1,0 +1,22 @@
+# Compiled object files
+*.o
+*.out
+
+# Executable files
+*.exe
+*.elf
+
+# Build directories
+build/
+bin/
+
+# IDE-specific files and directories
+.vscode/
+*.vs/
+
+# Generated documentation
+doc/
+
+# Editor backup files
+*~
+*.swp
