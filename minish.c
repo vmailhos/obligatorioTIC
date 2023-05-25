@@ -19,7 +19,7 @@ int main(void){ //hay que manejar errores tambien
     char *directorio = getcwd(path, sizeof(path));
 
     while (1){
-        fprintf(stderr, "(minish) %s:%s\n",username, directorio);
+        fprintf(stderr, "(minish) %s:%s\n",username, directorio); 
     }
     //char *linea = "aaaa bbbb ccc       \n";
     //linea2argv(linea, argc, argv);
