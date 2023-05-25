@@ -17,10 +17,11 @@ int main(void){ //hay que manejar errores tambien
     char *username= pwd->pw_name;
     char path[PATH_MAX];    
     char *directorio = getcwd(path, sizeof(path));
-    char input[MAXLINE];
 
+    char input[MAXLINE];
     while (1){
-        fprintf(stderr, "(minish) %s:%s\n",username, directorio);
+        fprintf(stderr, "(minish) %s:%s ",username, directorio);
         fgets(input, MAXLINE, stdin);
+        printf("%s: \n", input);
     }
 }
