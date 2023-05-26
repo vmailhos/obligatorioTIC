@@ -46,18 +46,31 @@ int builtin_getenv (int argc, char ** argv){
         variable = argv[i];
         valor = getenv(variable);
         if(valor!=NULL){
-            printf("%s=%s\n", variable, valor);
+            printf("%s = %s\n", variable, valor);
         }else{
-            printf("%s=(NO ENCONTRADO)\n", variable);
+            printf("%s = (NO ENCONTRADO)\n", variable);
         }
     }
     return 0;
 }
+
 int builtin_gid (int argc, char ** argv){
     return NULL;
 }
 int builtin_setenv (int argc, char ** argv){
-    return NULL;
+    if(argc!=3){
+        printf("Faltan o sobran argumentos.\n");
+        return 1;
+    }
+    char* variable = argv[1];
+    char* valor = argv[2];
+
+    if (setenv(variable, valor, 1) != 0) {
+        fprintf(stderr, "Error al definir: %s\n", variable);
+        return 1;
+    }
+
+    return 0;
 }
 int builtin_pid(int argc, char **argv) {
     
@@ -86,7 +99,7 @@ int externo (int argc, char ** argv){
 }
 
 
-int linea2argv(char *linea, int argc, char **argv) {
+int linea2argv(char *linea, int argc, char **argv) {  
     int i = 0;
     int c;
     int state = OUT;
