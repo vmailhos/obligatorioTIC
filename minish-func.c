@@ -13,10 +13,8 @@
 #define OUT 0
 #define MAXLINE 1024
 
-//struct builtin_struct * builtin_lookup(char *cmd);
-
-int last_exit_status = 0;
 int builtin_exit (int argc, char ** argv){
+    int last_exit_status = 0;
     int status = last_exit_status;
 
     if (argc > 1) {
