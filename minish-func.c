@@ -4,6 +4,8 @@
 #include <pwd.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <grp.h>
+#include <limits.h>
 
 #include "minish.h"
 #include "wrappers.h"
@@ -25,8 +27,44 @@ int builtin_exit (int argc, char ** argv){
 }
 
 int builtin_help (int argc, char ** argv){
-    return NULL;
+    //FALTA primera parte del help con un argumento
+
+    printf("\n");
+    printf("Comandos internos:\n");
+    printf("\n");
+    printf(" - exit [n]: exit the shell.\n");
+    printf("      Exits the shell with a status of N. If N is omitted, the exit status is that of the last command executed.\n");
+    printf("\n");
+    printf("- pid: get process identification.\n");
+    printf("\n");
+    printf("- uid: get User ID as a number and the username.\n");
+    printf("\n");
+    printf("- history [N]: display the history list.\n");
+    printf("      An argument of N lists only the last N entries.\n");
+    printf("\n");
+    printf("- status: \n");
+    printf("\n");
+    printf("- cd [dir]: change the shell working directory.\n");
+    printf("          cd xxx : change to xxx directory.\n");
+    printf("          cd -   : changes to the previous directory.\n");
+    printf("          cd     : change directory to the value of the HOME environment variable.\n"); 
+    printf("\n");
+    printf("- dir [text/directory]:\n");
+    printf("\n");
+    printf("- getenv: \n");
+    printf("\n");
+    printf("- gid: \n");
+    printf("\n");
+    printf("- setenv: \n");
+    printf("\n");
+    printf("- unsetenv: \n");
+    printf("\n");
+    printf("- ejecutar: \n");
+    printf("\n");
+    printf("- externo: \n");
+    printf("\n");
 }
+
 int builtin_history (int argc, char ** argv){
     return NULL;
 }
@@ -55,7 +93,29 @@ int builtin_getenv (int argc, char ** argv){
 }
 
 int builtin_gid (int argc, char ** argv){
-    return NULL;
+    gid_t gid_principal = getegid();
+    //printf("%d", gid_principal);
+    
+    struct group *grupo_principal = getgrgid(gid_principal);
+    if(grupo_principal == NULL){
+        return EXIT_FAILURE;
+    }
+    printf("Grupo Principal: %s\n", grupo_principal->gr_name);
+
+    gid_t groups[NGROUPS_MAX];
+    int num_grupos_segundarios = getgroups(NGROUPS_MAX, groups);
+    //printf("%d\n", num_grupos_segundarios);
+    if(num_grupos_segundarios == -1){
+        return EXIT_FAILURE;
+    }
+
+    printf( "Grupos secundarios:\n");
+     for (int i = 0; i < num_grupos_segundarios; i++) {
+        struct group *grupo = getgrgid(groups[i]);
+        if(grupo != NULL){
+            printf("- %s\n", grupo->gr_name);
+        }
+    }
 }
 
 int builtin_setenv (int argc, char ** argv){
