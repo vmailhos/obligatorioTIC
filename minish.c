@@ -47,6 +47,14 @@ int main(void){ //hay que manejar errores tambien
             builtin_uid(argc, argv);
         }
 
+        if (argc > 0 && strcmp(argv[0], "gid") == 0) {
+            builtin_gid(argc, argv);
+        }
+
+        if (argc > 0 && strcmp(argv[0], "help") == 0) {
+            builtin_help(argc, argv);
+        }
+
         if (argc > 0 && strcmp(argv[0], "getenv") == 0) {
             builtin_getenv(argc, argv);
         }
