@@ -40,7 +40,18 @@ int builtin_dir (int argc, char ** argv){
     return NULL;
 }
 int builtin_getenv (int argc, char ** argv){
-    return NULL;
+    char* variable;
+    char* valor;
+    for(int i = 1; i<argc; i++){
+        variable = argv[i];
+        valor = getenv(variable);
+        if(valor!=NULL){
+            printf("%s=%s\n", variable, valor);
+        }else{
+            printf("%s=(NO ENCONTRADO)\n", variable);
+        }
+    }
+    return 0;
 }
 int builtin_gid (int argc, char ** argv){
     return NULL;
@@ -115,16 +126,4 @@ int linea2argv(char *linea, int argc, char **argv) {
     }
 
     return wordcount;
-}
-
-
-char* getLinea(){
-    char* input = malloc_or_exit(MAXLINE);
-
-    fprintf(stderr, "(nombre1)(algo?)");
-    fgets(input, MAXLINE, stdin);
-
-    //printf("You entered: %s\n", input);
-    return input;
-    //cntD hace que fgets devuelva el fin del archivo
 }

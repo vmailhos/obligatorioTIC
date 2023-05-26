@@ -30,6 +30,7 @@ int main(void){ //hay que manejar errores tambien
     while (1){
         fprintf(stderr, "(minish) %s:%s ",username, directorio);
         fgets(input, MAXLINE, stdin);
+
         //printf("%s: \n", input);
 
         argc = linea2argv(input, MAXLINE, argv);
@@ -44,6 +45,10 @@ int main(void){ //hay que manejar errores tambien
         
         if (argc > 0 && strcmp(argv[0], "uid") == 0) {
             builtin_uid(argc, argv);
+        }
+
+        if (argc > 0 && strcmp(argv[0], "getenv") == 0) {
+            builtin_getenv(argc, argv);
         }
     }
     return 0;
