@@ -50,6 +50,14 @@ int main(void){ //hay que manejar errores tambien
         if (argc > 0 && strcmp(argv[0], "getenv") == 0) {
             builtin_getenv(argc, argv);
         }
+
+        if (argc > 0 && strcmp(argv[0], "setenv") == 0) {
+            builtin_setenv(argc, argv);
+        }
+
+        if (argc > 0 && strcmp(argv[0], "unsetenv") == 0) {
+            builtin_unsetenv(argc, argv);
+        }
     }
     return 0;
     

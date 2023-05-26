@@ -57,9 +57,10 @@ int builtin_getenv (int argc, char ** argv){
 int builtin_gid (int argc, char ** argv){
     return NULL;
 }
+
 int builtin_setenv (int argc, char ** argv){
     if(argc!=3){
-        printf("Faltan o sobran argumentos.\n");
+        fprintf(stderr, "Faltan o sobran argumentos.\n");
         return 1;
     }
     char* variable = argv[1];
@@ -72,6 +73,7 @@ int builtin_setenv (int argc, char ** argv){
 
     return 0;
 }
+
 int builtin_pid(int argc, char **argv) {
     
     printf("Process ID: %d\n", getpid());
@@ -89,8 +91,17 @@ int builtin_uid (int argc, char ** argv){
 }
 
 int builtin_unsetenv (int argc, char ** argv){
-    return NULL;
+    char* variable;
+    for(int i = 1; i<argc; i++){
+        variable = argv[i];
+        if (unsetenv(variable) != 0) {
+        fprintf(stderr, "Error al borrar: %s\n", variable);
+        return 1;
+        }
+    }
+    return 0;
 }
+
 int ejecutar (int argc, char ** argv){
     return NULL;
 }
