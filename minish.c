@@ -67,12 +67,14 @@ int main(void){ //hay que manejar errores tambien
         fgets(input, MAXLINE, stdin);
         argc = linea2argv(input, MAXLINE, argv);
 
-        struct builtin_struct* structB = builtin_lookup(argv[0]);
+        /*struct builtin_struct* structB = builtin_lookup(argv[0]);
         if(structB!=NULL){
             int respuesta = (*structB->func)(argc, argv);
         }else{
             //funcion externa
-        }
+        }*/
+
+        ejecutar(argc,argv);
     }
     return 0;
     
