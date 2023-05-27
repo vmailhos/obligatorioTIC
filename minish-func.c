@@ -25,42 +25,33 @@ int builtin_exit (int argc, char ** argv){
 }
 
 int builtin_help (int argc, char ** argv){
-    //FALTA primera parte del help con un argumento
 
-    printf("\n");
-    printf("Comandos internos:\n");
-    printf("\n");
-    printf(" - exit [n]: exit the shell.\n");
-    printf("      Exits the shell with a status of N. If N is omitted, the exit status is that of the last command executed.\n");
-    printf("\n");
-    printf("- pid: get process identification.\n");
-    printf("\n");
-    printf("- uid: get User ID as a number and the username.\n");
-    printf("\n");
-    printf("- history [N]: display the history list.\n");
-    printf("      An argument of N lists only the last N entries.\n");
-    printf("\n");
-    printf("- status: \n");
-    printf("\n");
-    printf("- cd [dir]: change the shell working directory.\n");
-    printf("          cd xxx : change to xxx directory.\n");
-    printf("          cd -   : changes to the previous directory.\n");
-    printf("          cd     : change directory to the value of the HOME environment variable.\n"); 
-    printf("\n");
-    printf("- dir [text/directory]:\n");
-    printf("\n");
-    printf("- getenv: \n");
-    printf("\n");
-    printf("- gid: \n");
-    printf("\n");
-    printf("- setenv: \n");
-    printf("\n");
-    printf("- unsetenv: \n");
-    printf("\n");
-    printf("- ejecutar: \n");
-    printf("\n");
-    printf("- externo: \n");
-    printf("\n");
+    if (argv[1]== NULL){
+        printf("\n");
+        printf("Comandos internos:\n");
+        printf("- exit [n]: exit the shell.\n");
+        printf("- pid: get process identification.\n");
+        printf("- uid: get User ID as a number and the username.\n");
+        printf("- history [N]: display the history list.\n");
+        printf("- status: \n");
+        printf("- cd [dir]: change the shell working directory.\n");
+        printf("- dir [text/directory]:\n");
+        printf("- getenv: \n");
+        printf("- gid: \n");
+        printf("- setenv: \n");
+        printf("- unsetenv: \n");
+        printf("- ejecutar: \n");
+        printf("- externo: \n");
+        printf("\n");
+    }else {
+        struct builtin_struct* builtin = builtin_lookup(argv[1]);
+        if (builtin != NULL) {
+            printf("%s\n", builtin->help_txt);
+        } else {
+            printf("Error");
+        }  
+    }
+
 }
 
 int builtin_history (int argc, char ** argv){
