@@ -153,25 +153,30 @@ int builtin_unsetenv (int argc, char ** argv){
 
 
 int ejecutar (int argc, char ** argv){
-     struct builtin_struct* builtin = builtin_lookup(argv[0]);
-        if(builtin!=NULL){
-            int comando_interno = (*builtin->func)(argc, argv);
-        }else{
-            pid_t pid = fork();
-            if (pid == -1){
-                printf("Error");
-                exit(EXIT_FAILURE);
-            }
-        else if(pid ==0){
-            //child process
-        }else{
-            //parent process
-        }
-        }
+    struct builtin_struct* builtin = builtin_lookup(argv[0]);
+    if (builtin != NULL) {
+        int comando_interno = (*builtin->func)(argc, argv);
+        return comando_interno;  
+    } else {
+        return externo(argc, argv);  
+    }
 }
+
 int externo (int argc, char ** argv){
-    return NULL;
+    //No lo termine!
+    pid_t pid = fork();
+
+    if (pid == -1) {
+        printf("Error.\n");
+    } else if (pid == 0) {
+        // Proceso hijo
+
+    } else {
+        // Proceso padre
+        int status;
+    }
 }
+
 
 
 int linea2argv(char *linea, int argc, char **argv) {  
