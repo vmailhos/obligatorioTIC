@@ -67,10 +67,12 @@ int main(void){ //hay que manejar errores tambien
     char input[MAXLINE];
     char* argv[MAXLINE];
     int argc;
+    char* respuesta;
 
      while (1){ 
         fprintf(stderr, "(minish) %s:%s ",username, directorio);
-        char* respuesta = fgets(input, MAXLINE, stdin);
+        respuesta = fgets(input, MAXLINE, stdin);
+        printf("res: %s\n", respuesta);
         if(respuesta!=NULL){
             argc = linea2argv(input, MAXLINE, argv);
             if(argc!=0){
@@ -78,7 +80,5 @@ int main(void){ //hay que manejar errores tambien
             }
         }
     }
-    return 0;
-
-    
+    return 0;    
 }
