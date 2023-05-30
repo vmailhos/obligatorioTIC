@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <signal.h>
+#include <errno.h>
+
 
 #include "wrappers.h"
 #include "minish.h"
@@ -49,7 +51,7 @@ struct builtin_struct* builtin_lookup(char *cmd){
         }
         i++;
     }
-    return NULL;
+    return NULL; 
 }
 
 void sigint_handler(int sig) {
@@ -64,19 +66,21 @@ int main(void){ //hay que manejar errores tambien
     char path[PATH_MAX];    
     char *directorio = getcwd(path, sizeof(path));
 
+    int status=0; 
+
     char input[MAXLINE];
     char* argv[MAXLINE];
     int argc;
     char* respuesta;
 
      while (1){ 
-        fprintf(stderr, "(minish) %s:%s ",username, directorio);
+        fprintf(stdout, "(minish) %s:%s ",username, directorio);
         respuesta = fgets(input, MAXLINE, stdin);
-        printf("res: %s\n", respuesta);
+        printf("res: %s\n", respuesta); //esto no hay que sacarlo?
         if(respuesta!=NULL){
             argc = linea2argv(input, MAXLINE, argv);
             if(argc!=0){
-                ejecutar(argc,argv);
+                status=ejecutar(argc,argv);
             }
         }
     }

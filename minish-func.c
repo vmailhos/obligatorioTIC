@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
+
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -14,28 +16,33 @@
 #define OUT 0
 #define MAXLINE 1024
 
+int statusValue = 0;
+
 int ejecutar (int argc, char ** argv){
     struct builtin_struct* builtin = builtin_lookup(argv[0]);
     if (builtin != NULL) {
         int comando_interno = (*builtin->func)(argc, argv);
-        return comando_interno;  
+        statusValue=comando_interno;  
+        return statusValue;
     } else {
-        return externo(argc, argv);  
+        statusValue=externo(argc, argv);
+        return statusValue;
     }
 }
 
+//los printf se supone que son errores?
 int externo (int argc, char ** argv){
 
     pid_t pid = fork();
 
     if (pid == -1) {
         perror("Error en el fork.\n");
-        return -1;
+        return 1;
 
     } else if (pid == 0) {
         execvp(argv[0], argv);
         perror("Error en el execvp");
-        return -1;
+        return 1;
 
     } else {
         int status;
@@ -60,7 +67,7 @@ int externo (int argc, char ** argv){
 
     }
 
-    return -1;
+    return 1; 
 }
 
 
@@ -105,3 +112,6 @@ int linea2argv(char *linea, int argc, char **argv) {
 
     return wordcount;
 }
+
+
+

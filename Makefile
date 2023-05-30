@@ -12,7 +12,7 @@ minish:   minish-func.o builtin_exit.o builtin_help.o builtin_history.o builtin_
 minish-func.o: minish.h wrappers.h
 minish.o: minish.h wrappers.h
 wrappers.o: wrappers.h
-#wrappers-mac.o: wrappers.h
+# wrappers-mac.o: wrappers.h
 builtin_exit.o: minish.h wrappers.h
 builtin_help.o: minish.h wrappers.h
 builtin_history.o: minish.h wrappers.h
