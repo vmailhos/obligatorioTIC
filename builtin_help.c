@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
+
 
 #include "minish.h"
 #include "wrappers.h"
@@ -29,8 +31,9 @@ int builtin_help (int argc, char ** argv){
         if (builtin != NULL) {
             printf("%s\n", builtin->help_txt);
         } else {
-            printf("Error");
-        }  
+            perror("Error, no se pudo encontrar el grupo principal"); //nos tira undefined error: 0
+            return 1;        
+            }  
     }
-
+    return 0;
 }

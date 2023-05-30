@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include "minish.h"
 #include "wrappers.h"
 
-
+//si hay error retorna 1, sino retorna 0
 int builtin_getenv (int argc, char ** argv){
     char* variable;
     char* valor;
@@ -15,7 +16,11 @@ int builtin_getenv (int argc, char ** argv){
         if(valor!=NULL){
             printf("%s = %s\n", variable, valor);
         }else{
-            printf("%s = (NO ENCONTRADO)\n", variable);
+            //la funcion perror solo puede imprimir un mensaje --> creamos el mensaje de antemano
+            char errorMessage[100];
+            sprintf(errorMessage, "%s = error, no fue encontrado\n", variable);
+            perror(errorMessage); //nos tira undefined error: 0
+            return 1; 
         }
     }
     return 0;

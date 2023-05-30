@@ -20,3 +20,5 @@ doc/
 # Editor backup files
 *~
 *.swp
+
+# rm *.o
