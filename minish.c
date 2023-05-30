@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
+#include <signal.h>
 
 #include "wrappers.h"
 #include "minish.h"
@@ -51,7 +52,12 @@ struct builtin_struct* builtin_lookup(char *cmd){
     return NULL;
 }
 
+void sigint_handler(int sig) {
+    fprintf(stderr,"ATRAPE UN ctrlC\n");
+}
+
 int main(void){ //hay que manejar errores tambien
+    signal(SIGINT, sigint_handler);
     uid_t uid = getuid();
     struct passwd *pwd = getpwuid(uid);
     char *username= pwd->pw_name;
@@ -62,20 +68,17 @@ int main(void){ //hay que manejar errores tambien
     char* argv[MAXLINE];
     int argc;
 
-    while (1){
+     while (1){ 
         fprintf(stderr, "(minish) %s:%s ",username, directorio);
-        fgets(input, MAXLINE, stdin);
-        argc = linea2argv(input, MAXLINE, argv);
-
-        /*struct builtin_struct* structB = builtin_lookup(argv[0]);
-        if(structB!=NULL){
-            int respuesta = (*structB->func)(argc, argv);
-        }else{
-            //funcion externa
-        }*/
-
-        ejecutar(argc,argv);
+        char* respuesta = fgets(input, MAXLINE, stdin);
+        if(respuesta!=NULL){
+            argc = linea2argv(input, MAXLINE, argv);
+            if(argc!=0){
+                ejecutar(argc,argv);
+            }
+        }
     }
     return 0;
+
     
 }
