@@ -10,6 +10,8 @@
 #include "wrappers.h"
 
 //los printf se supone que son errores?
+/*/usr/local/bin/minish: execvp error
+: No such file or directory*/
 int externo (int argc, char ** argv){
 
     pid_t pid = fork();
@@ -19,7 +21,7 @@ int externo (int argc, char ** argv){
 
     } else if (pid == 0) {
         execvp(argv[0], argv);
-        perror("Error en el execvp");
+        perror("execvp error\n");
 
     } else {
         int status;
