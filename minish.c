@@ -9,7 +9,6 @@
 
 #include "wrappers.h"
 #include "minish.h"
-//vale
 
 #define HELP_CD      "cd [..|dir] - cambia de directorio corriente"
 #define HELP_DIR     "dir [str]- muestra archivos en directorio corriente, que tengan 'str'"
@@ -54,17 +53,19 @@ struct builtin_struct* builtin_lookup(char *cmd){
     return NULL; 
 }
 
-void sigint_handler(int sig) {
-    fprintf(stderr,"ATRAPE UN ctrlC\n");
+void sigint_handler(int signum) {
+    fprintf(stderr, "1\n");
 }
 
 int main(void){ //hay que manejar errores tambien
-    signal(SIGINT, sigint_handler);
+    struct sigaction str_sigint_action;
+    memset(&str_sigint_action, 0, sizeof(str_sigint_action));
+    str_sigint_action.sa_handler = sigint_handler;
+    sigaction(SIGINT, &str_sigint_action, NULL);
+
     uid_t uid = getuid();
     struct passwd *pwd = getpwuid(uid);
     char *username= pwd->pw_name;
-    char path[PATH_MAX];    
-    char *directorio = getcwd(path, sizeof(path));
 
     int status=0; 
 
@@ -74,13 +75,21 @@ int main(void){ //hay que manejar errores tambien
     char* respuesta;
 
      while (1){ 
+        char path[PATH_MAX];
+        char *directorio = getcwd(path, sizeof(path));
+
         fprintf(stdout, "(minish) %s:%s ",username, directorio);
+        clearerr(stdin);
         respuesta = fgets(input, MAXLINE, stdin);
-        if(respuesta!=NULL){
-            argc = linea2argv(input, MAXLINE, argv);
-            if(argc!=0){
-                status=ejecutar(argc,argv);
+        if(respuesta==NULL){
+            if(feof(stdin)){
+                break;
             }
+            continue;
+        }
+        argc = linea2argv(input, MAXLINE, argv);
+        if(argc!=0){
+            status=ejecutar(argc,argv);
         }
     }
     return 0;    
