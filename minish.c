@@ -7,9 +7,9 @@
 #include <signal.h>
 #include <errno.h>
 
-//hola hola hola
 #include "wrappers.h"
 #include "minish.h"
+//vale
 
 #define HELP_CD      "cd [..|dir] - cambia de directorio corriente"
 #define HELP_DIR     "dir [str]- muestra archivos en directorio corriente, que tengan 'str'"
