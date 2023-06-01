@@ -21,7 +21,7 @@ int builtin_gid (int argc, char ** argv){
         perror("Error, no se pudo encontrar el grupo principal"); //nos tira undefined error: 0
         return 1;
     }
-    printf("Grupo Principal: %s\n", grupo_principal->gr_name);
+    printf("Real Gid: %d (%s)\n", grupo_principal->gr_gid ,grupo_principal->gr_name);
 
     gid_t groups[NGROUPS_MAX];
     int num_grupos_segundarios = getgroups(NGROUPS_MAX, groups);
@@ -30,12 +30,17 @@ int builtin_gid (int argc, char ** argv){
         perror("Error, no se pudo encontrar los grupos secundarios"); //nos tira undefined error: 0
         return 1;    }
 
-    printf( "Grupos secundarios:\n");
+    printf( "Groups:");
      for (int i = 0; i < num_grupos_segundarios; i++) {
         struct group *grupo = getgrgid(groups[i]);
         if(grupo != NULL){
-            printf("- %s\n", grupo->gr_name);
+            if(i == num_grupos_segundarios-1){
+                printf(" %d (%s)", grupo_principal->gr_gid, grupo->gr_name);
+            }else{
+                printf(" %d (%s),", grupo_principal->gr_gid, grupo->gr_name);
+            }
         }
     }
+    printf("\n");
     return 0;
 }
