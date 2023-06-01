@@ -73,7 +73,9 @@ int main(void){ //hay que manejar errores tambien
     int argc;
     char* respuesta;
 
-     while (1){ 
+     while (1){ //borrar dos primeras
+        char path[PATH_MAX];    
+        char *directorio = getcwd(path, sizeof(path));
         fprintf(stdout, "(minish) %s:%s ",username, directorio);
         respuesta = fgets(input, MAXLINE, stdin);
         if(respuesta!=NULL){
