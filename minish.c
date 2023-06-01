@@ -76,7 +76,6 @@ int main(void){ //hay que manejar errores tambien
      while (1){ 
         fprintf(stdout, "(minish) %s:%s ",username, directorio);
         respuesta = fgets(input, MAXLINE, stdin);
-        printf("res: %s\n", respuesta); //esto no hay que sacarlo?
         if(respuesta!=NULL){
             argc = linea2argv(input, MAXLINE, argv);
             if(argc!=0){

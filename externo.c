@@ -9,8 +9,6 @@
 #include "minish.h"
 #include "wrappers.h"
 
-
-
 //los printf se supone que son errores?
 int externo (int argc, char ** argv){
 
@@ -18,12 +16,10 @@ int externo (int argc, char ** argv){
 
     if (pid == -1) {
         perror("Error en el fork.\n");
-        return 1;
 
     } else if (pid == 0) {
         execvp(argv[0], argv);
         perror("Error en el execvp");
-        return 1;
 
     } else {
         int status;
@@ -38,12 +34,16 @@ int externo (int argc, char ** argv){
         //Proceso hijo termino por una senal
         }else if (WIFSIGNALED(status)) {
             int signal_number = WTERMSIG(status);
-            printf("El proceso hijo terminó debido a la señal %d\n", signal_number);
+            char errorMessage[100];
+            sprintf("El proceso hijo terminó debido a la señal %d\n", signal_number);
+            perror(errorMessage);
        
         //Proceso hijo se detuvo por una senal
         } else if (WIFSTOPPED(status)) {
             int signal_number = WSTOPSIG(status);
-            printf("El proceso hijo se detuvo debido a la señal %d\n", signal_number);
+            char errorMessage[100];
+            sprintf("El proceso hijo se detuvo debido a la señal %d\n", signal_number);
+            perror(errorMessage);
         }
 
     }

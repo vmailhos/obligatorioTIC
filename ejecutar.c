@@ -5,7 +5,6 @@
 #include "minish.h"
 #include "wrappers.h"
 
-
 int statusValue = 0;
 
 int ejecutar (int argc, char ** argv){
