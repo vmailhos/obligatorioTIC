@@ -8,8 +8,9 @@
 
 extern char *prev_dir; // ponerlo e main y actualizar ahi
 
-//arreglar sprintf y el main como lo cambio gerardo
+//arreglar sprintf y el main como lo cambio gerardo a mery
 //controlar errores de si te da mas de un argv en todas las funciones
+//no funciona del todo bien a veces cambias de directorio y el anterior se mantiene igual
 int builtin_cd (int argc, char ** argv){
     char *home_dir = getenv("HOME");
     char *next_dir;
@@ -20,28 +21,23 @@ int builtin_cd (int argc, char ** argv){
     }
 
     //cuando solo está el comando
-    //funciona
-    //usar PWD en el main!!
     else if (argc==1){
         if (home_dir != NULL) {
-            prev_dir = getenv("PWD");
             chdir(home_dir);
             setenv("PWD", home_dir, 1);
         }
     }
 
     //cuando hay dos argumentos
-    else { //no funciona 
-        printf("%s\n",prev_dir);
+    else { 
         if (argv[1][0]=='-'){
             if (prev_dir != NULL) {
                 chdir(prev_dir);
                 setenv("PWD", prev_dir, 1);
             }
         }
-        else { //funciona
+        else { 
             // Cambiar al directorio especificado
-            prev_dir = getenv("PWD");
             next_dir= argv[1];
             if (chdir(next_dir) == 0) {
             char absolute_path[1024]; //usar getcwd

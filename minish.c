@@ -26,6 +26,9 @@
 #define MAXLINE 1024
 #define PATH_MAX 4096
 
+char *prev_dir = NULL;
+char *directorio = NULL;
+
 struct builtin_struct builtin_arr[] = {
     { "exit", builtin_exit, HELP_EXIT },
     { "help", builtin_help, HELP_HELP },
@@ -76,8 +79,22 @@ int main(void){ //hay que manejar errores tambien
 
 
      while (1){ 
+        if (directorio!=NULL){
+            prev_dir = strdup(directorio);  
+            if (prev_dir==NULL){
+                perror("error\n");
+                return 1;
+            }
+        }
+        printf("%s\n",prev_dir);
+        directorio = getenv("PWD");
+        printf("%s\n",directorio);
+
+
+        /*
         char path[PATH_MAX];
         char *directorio = getcwd(path, sizeof(path));
+        */
 
         fprintf(stdout, "(minish) %s:%s ",username, directorio);
         clearerr(stdin);
@@ -92,6 +109,9 @@ int main(void){ //hay que manejar errores tambien
         if(argc!=0){
             status=ejecutar(argc,argv);
         }
+
+        free(prev_dir); //liberarlo antes de asignarle un nuevo valor
+
     }
     return 0;    
 }
