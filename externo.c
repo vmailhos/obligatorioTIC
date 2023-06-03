@@ -20,7 +20,7 @@ int externo (int argc, char ** argv){
 
     } else if (pid == 0) {
         execvp(argv[0], argv);
-        perror("execvp error\n");
+        perror("execvp error");
 
     } else {
         struct sigaction str_sigint_action_old;
@@ -43,11 +43,11 @@ int externo (int argc, char ** argv){
         //Proceso hijo termino por una senal
         }else if (WIFSIGNALED(status)) {
             int signal_number = WTERMSIG(status);
-            fprintf(stderr, "El proceso hijo terminó debido a la señal %d\n", signal_number);
+            fprintf(stderr, " : El proceso hijo terminó debido a la señal %d\n", signal_number);
         //Proceso hijo se detuvo por una senal
         } else if (WIFSTOPPED(status)) {
             int signal_number = WTERMSIG(status);
-            fprintf(stderr, "El proceso hijo se detuvo debido a la señal %d\n", signal_number);
+            fprintf(stderr, " : El proceso hijo se detuvo debido a la señal %d\n", signal_number);
         }
     }
 

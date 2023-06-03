@@ -57,7 +57,7 @@ struct builtin_struct* builtin_lookup(char *cmd){
 }
 
 void sigint_handler(int signum) {
-    fprintf(stderr, "1\n");
+    fprintf(stderr, " : ctrlC atrapado\n");
 }
 
 int main(void){ //hay que manejar errores tambien
@@ -78,7 +78,7 @@ int main(void){ //hay que manejar errores tambien
     char* respuesta;
 
 
-     while (1){ 
+    while (1){ 
         if (directorio!=NULL){
             prev_dir = strdup(directorio);  
             if (prev_dir==NULL){
@@ -86,15 +86,15 @@ int main(void){ //hay que manejar errores tambien
                 return 1;
             }
         }
-        printf("%s\n",prev_dir);
+        /*printf("%s\n",prev_dir);
         directorio = getenv("PWD");
-        printf("%s\n",directorio);
+        printf("%s\n",directorio);*/
 
 
-        /*
+        
         char path[PATH_MAX];
         char *directorio = getcwd(path, sizeof(path));
-        */
+        
 
         fprintf(stdout, "(minish) %s:%s ",username, directorio);
         clearerr(stdin);
