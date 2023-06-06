@@ -114,6 +114,8 @@ int builtin_dir (int argc, char ** argv){
         carpeta = opendir(".");
         if (carpeta != NULL) {
             return printEntradas(carpeta);
+        }else{      
+            return 1;
         }
     }else if (argc==2){
         carpeta = opendir(argv[1]);
