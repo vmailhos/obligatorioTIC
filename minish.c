@@ -56,8 +56,8 @@ struct builtin_struct* builtin_lookup(char *cmd){
     return NULL; 
 }
 
-void sigint_handler(int signum) {
-    fprintf(stderr, " : ctrlC atrapado\n");
+void sigint_handler(int sig) {
+    fprintf(stderr, " : ctrlC atrapado: %d\n", sig);
 }
 
 
