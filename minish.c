@@ -27,6 +27,7 @@
 #define PATH_MAX 4096
 
 char *directorio = NULL;
+struct deq *history_deq;
 
 struct builtin_struct builtin_arr[] = {
     { "exit", builtin_exit, HELP_EXIT },
@@ -59,6 +60,84 @@ void sigint_handler(int signum) {
     fprintf(stderr, " : ctrlC atrapado\n");
 }
 
+
+struct deq *deq_create(void) {
+    struct deq *deque;
+    deque = (struct deq *) malloc_or_exit(sizeof(struct deq));
+    deque->count = 0;
+    deque->leftmost = NULL;
+    deque->rightmost = NULL;
+    return deque;
+}
+
+struct deq_elem *deq_append(struct deq *deque, char *s) {
+    struct deq_elem *new_elem;
+    new_elem = (struct deq_elem *) malloc_or_exit(sizeof(struct deq_elem));
+    new_elem->str = malloc_or_exit(strlen(s) + 1);
+    strcpy(new_elem->str, s);
+    new_elem->next = NULL;
+
+    if (deque->rightmost == NULL) {
+        new_elem->prev = NULL;
+        deque->leftmost = new_elem;
+    } else {
+        new_elem->prev = deque->rightmost;
+        deque->rightmost->next = new_elem;
+    }
+        deque->rightmost = new_elem;
+    deque->count++;
+
+    return new_elem;
+}
+
+void add_to_history(char* command) {
+    deq_append(history_deq, command);
+}
+
+void save_history() {
+    char history_file[PATH_MAX];
+
+    snprintf(history_file, sizeof(history_file), "%s/%s", getenv("HOME"), ".minish_history");
+
+    FILE *file = fopen(history_file, "w");
+    if (file == NULL) {
+        return;
+    }
+
+    struct deq_elem *elem = history_deq->leftmost;
+
+    while (elem != NULL) {
+        fprintf(file, "%s\n", elem->str);
+        elem = elem->next;
+    }
+
+    fclose(file);
+}
+
+void load_history() {
+    FILE *file = fopen(HISTORY_FILE, "r");
+    if (file == NULL) {
+        return;
+    }
+
+    char line[MAXLINE];
+
+    while (fgets(line, MAXLINE, file) != NULL) {
+        size_t len = strlen(line);
+        if (len > 0 && line[len - 1] == '\n') {
+            line[len - 1] = '\0';
+        }
+        deq_append(history_deq, line);
+    }
+
+    fclose(file);
+}
+
+void cleanup() {
+    save_history();
+}
+
+
 int main(void){ //hay que manejar errores tambien
     struct sigaction str_sigint_action;
     memset(&str_sigint_action, 0, sizeof(str_sigint_action));
@@ -69,13 +148,21 @@ int main(void){ //hay que manejar errores tambien
     struct passwd *pwd = getpwuid(uid);
     char *username= pwd->pw_name;
 
-    int status=0; 
+
+
+    struct deq *deque = deq_create();
 
     char input[MAXLINE];
     char* argv[MAXLINE];
     int argc;
     char* respuesta;
 
+    atexit(cleanup);
+
+    history_deq = deque;
+    load_history();
+   
+    //int status=0;
 
     while (1){ 
 
@@ -91,10 +178,14 @@ int main(void){ //hay que manejar errores tambien
             }
             continue;
         }
+        add_to_history(input);
         argc = linea2argv(input, MAXLINE, argv);
+
         if(argc!=0){
-            status=ejecutar(argc,argv);
+            //status=ejecutar(argc,argv);
+            ejecutar(argc,argv);
         }
     }
+   
     return 0;    
 }

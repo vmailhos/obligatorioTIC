@@ -1,7 +1,7 @@
 #define MAXLINE 1024        // tamaño máximo de la línea de entrada
 #define MAXCWD 1024         // tamaño máximo para alojar el pathname completo del directorio corriente
 #define MAXWORDS 256        // cantidad máxima de palabras en la línea
-#define HISTORY_FILE    ".minish_history"   // nombre del archivo que almacena historia de comandos
+#define HISTORY_FILE  ".minish_history"   // nombre del archivo que almacena historia de comandos
 
 // Definición de Estructuras
 
@@ -11,12 +11,29 @@ struct builtin_struct {         // struct con información de los builtins
     char *help_txt;             // el texto de ayuda
 };
 
+struct deq {                // double ended queue
+    int count;              // how many elements in queue
+    struct deq_elem *leftmost;  // leftmost element in queue - NULL if count==0
+    struct deq_elem *rightmost; // rightmost element in queue - NULL if count==0
+};
+
+struct deq_elem {           // element of double ended queue
+    char *str;              // stored string
+    struct deq_elem *next;  // next element - NULL if last
+    struct deq_elem *prev;  // previous element - NULL if first
+};
 
 // Variables que deben definirse en el main como externas
 
 extern int globalstatret;       // guarda status del ultimo comando
 
 extern struct builtin_struct builtin_arr[];
+
+extern struct deq *history_deq;
+struct deq *deq_create(void);
+struct deq_elem *deq_append(struct deq *deque, char *s);
+void add_to_history(char* command);
+
 
 /*
     builtin_arr es una lista de los builtins, que se recorrerá en forma lineal.
