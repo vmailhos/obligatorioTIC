@@ -103,12 +103,12 @@ void add_to_history(char* command) {
     deq_append(history_deq, command);
 }
 
-void save_history(struct deq_elem * structDeq1) {
+void save_history(struct deq_elem * structDeq1, struct deq *deque) {
     //char history_file[PATH_MAX];
 
     //snprintf(history_file, sizeof(history_file), "%s/%s", getenv("HOME"), ".minish_history");
 
-    FILE *file = fopen("history.txt", "w");
+    FILE *file = fopen(".history", "a");
     if (file == NULL) {
         perror("Error al abrir archivo de history");
         return;
@@ -116,6 +116,9 @@ void save_history(struct deq_elem * structDeq1) {
 
     struct deq_elem *elem = structDeq1;
     elem = elem->next;
+    if(elem==NULL){
+        elem  = deque->leftmost;
+    }
 
     while (elem != NULL) {
         fprintf(file, "%s", elem->str);
@@ -126,7 +129,7 @@ void save_history(struct deq_elem * structDeq1) {
 
 struct deq_elem * load_history() {
     struct deq_elem * punteroASesionNueva;
-    FILE *file = fopen("history.txt", "r");
+    FILE *file = fopen(".history", "r");
     if (file == NULL) {
         perror("Error al abrir archivo de history");
         return;
@@ -180,7 +183,7 @@ int main(void){ //hay que manejar errores tambien
         argc = linea2argv(input, MAXLINE, argv);
 
         if(strcmp(argv[0],"exit")==0){
-            save_history(punteroAPrimerElDeSesionNueva);
+            save_history(punteroAPrimerElDeSesionNueva, history_deq);
         }
 
         if(argc!=0){
