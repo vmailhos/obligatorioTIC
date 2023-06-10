@@ -12,13 +12,30 @@
 
 extern struct deq *history_deq;
 
-int builtin_history (int argc, char ** argv){
-   
-    struct deq_elem *elem = history_deq->leftmost;
+int builtin_history(int argc, char ** argv){
+    int cantidad;
 
-    while (elem != NULL) {
+    if(argc==1){
+        cantidad = 10;
+    }else if (argc==2){
+        cantidad = atoi(argv[1]);                           //puede tirar error?
+    }else{
+        perror("Cantidad de argumentos erronea\n");
+        return 1;
+    }
+
+    if(cantidad > history_deq->count) cantidad = history_deq->count;
+    
+    struct deq_elem *elem = history_deq->rightmost;
+
+    for(int i=0; i<cantidad-1; i++){
+        elem = elem->prev;
+    }
+
+    for(int i=0; i<cantidad; i++){
         printf("%s", elem->str);
         elem = elem->next;
     }
+
     return 0;
 }

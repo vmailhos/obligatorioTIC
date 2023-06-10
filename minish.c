@@ -60,64 +60,30 @@ void sigint_handler(int sig) {
     fprintf(stderr, " : ctrlC atrapado: %d\n", sig);
 }
 
-
-struct deq *deq_create(void) {
-    struct deq *deque;
-    deque = (struct deq *) malloc_or_exit(sizeof(struct deq));
-    deque->count = 0;
-    deque->leftmost = NULL;
-    deque->rightmost = NULL;
-    return deque;
-}
-
-struct deq_elem *deq_append(struct deq *deque, char *s) {
-    struct deq_elem *new_elem;
-    new_elem = (struct deq_elem *) malloc_or_exit(sizeof(struct deq_elem));
-    new_elem->str = malloc_or_exit(strlen(s) + 1);
-    strcpy(new_elem->str, s);
-    new_elem->next = NULL;
-
-    if (deque->rightmost == NULL) {
-        new_elem->prev = NULL;
-        deque->leftmost = new_elem;
-    } else {
-        new_elem->prev = deque->rightmost;
-        deque->rightmost->next = new_elem;
-    }
-        deque->rightmost = new_elem;
-    deque->count++;
-
-    return new_elem;
-}
-
-void deq_print(struct deq *deque){
-    int size = deque->count;
-    struct deq_elem* nodo1 = deque->leftmost;
-    for(int i=0; i<size; i++){
-        printf("Elemento n:%d s:%s", i, nodo1->str);
-        nodo1 = nodo1->next;
-    }
-}
-
 void add_to_history(char* command) {
     deq_append(history_deq, command);
 }
 
 void save_history(struct deq_elem * structDeq1, struct deq *deque) {
-    //char history_file[PATH_MAX];
+    char filename[FILENAME_MAX];
+    const char *home_dir = getenv("HOME");
+    if (home_dir == NULL) {
+        perror("Error al obtener la variable de entorno HOME");
+        return;
+    }
+    snprintf(filename, sizeof(filename), "%s/%s", home_dir, ".minish_history");
 
-    //snprintf(history_file, sizeof(history_file), "%s/%s", getenv("HOME"), ".minish_history");
-
-    FILE *file = fopen(".history", "a");
+    FILE *file = fopen(filename, "a");
     if (file == NULL) {
         perror("Error al abrir archivo de history");
         return;
     }
 
     struct deq_elem *elem = structDeq1;
-    elem = elem->next;
     if(elem==NULL){
-        elem  = deque->leftmost;
+        elem = deque->leftmost;
+    }else{
+        elem = elem->next;
     }
 
     while (elem != NULL) {
@@ -128,11 +94,27 @@ void save_history(struct deq_elem * structDeq1, struct deq *deque) {
 }
 
 struct deq_elem * load_history() {
-    struct deq_elem * punteroASesionNueva;
-    FILE *file = fopen(".history", "r");
-    if (file == NULL) {
-        perror("Error al abrir archivo de history");
+    char filename[FILENAME_MAX];
+    const char *home_dir = getenv("HOME");
+    if (home_dir == NULL) {
+        perror("Error al obtener la variable de entorno HOME");
         return;
+    }
+    snprintf(filename, sizeof(filename), "%s/%s", home_dir, ".minish_history");
+
+    struct deq_elem * punteroASesionNueva;
+    FILE *file;
+    file = fopen(filename, "r");
+    if (file == NULL) {
+        //SI DIO NULL PUEDE SER XQ AUN NO FUE CREADO
+        file = fopen(filename, "w");
+        if(file == NULL){
+            //SI DIO NULL HUBO UN ERROR
+            perror("Error al abrir archivo de history");
+            return;
+        }
+        fclose(file);
+        return NULL;
     }
 
     char line[MAXLINE];

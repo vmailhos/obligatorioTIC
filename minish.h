@@ -32,7 +32,8 @@ extern struct builtin_struct builtin_arr[];
 extern struct deq *history_deq;
 struct deq *deq_create(void);
 struct deq_elem *deq_append(struct deq *deque, char *s);
-void add_to_history(char* command);
+//void add_to_history(char* command);
+extern void deq_print(struct deq *deque);
 
 
 /*
