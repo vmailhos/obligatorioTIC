@@ -90,51 +90,55 @@ struct deq_elem *deq_append(struct deq *deque, char *s) {
     return new_elem;
 }
 
+void deq_print(struct deq *deque){
+    int size = deque->count;
+    struct deq_elem* nodo1 = deque->leftmost;
+    for(int i=0; i<size; i++){
+        printf("Elemento n:%d s:%s", i, nodo1->str);
+        nodo1 = nodo1->next;
+    }
+}
+
 void add_to_history(char* command) {
     deq_append(history_deq, command);
 }
 
-void save_history() {
-    char history_file[PATH_MAX];
+void save_history(struct deq_elem * structDeq1) {
+    //char history_file[PATH_MAX];
 
-    snprintf(history_file, sizeof(history_file), "%s/%s", getenv("HOME"), ".minish_history");
+    //snprintf(history_file, sizeof(history_file), "%s/%s", getenv("HOME"), ".minish_history");
 
-    FILE *file = fopen(history_file, "w");
+    FILE *file = fopen("history.txt", "w");
     if (file == NULL) {
+        perror("Error al abrir archivo de history");
         return;
     }
 
-    struct deq_elem *elem = history_deq->leftmost;
+    struct deq_elem *elem = structDeq1;
+    elem = elem->next;
 
     while (elem != NULL) {
-        fprintf(file, "%s\n", elem->str);
+        fprintf(file, "%s", elem->str);
         elem = elem->next;
     }
-
     fclose(file);
 }
 
-void load_history() {
-    FILE *file = fopen(HISTORY_FILE, "r");
+struct deq_elem * load_history() {
+    struct deq_elem * punteroASesionNueva;
+    FILE *file = fopen("history.txt", "r");
     if (file == NULL) {
+        perror("Error al abrir archivo de history");
         return;
     }
 
     char line[MAXLINE];
 
     while (fgets(line, MAXLINE, file) != NULL) {
-        size_t len = strlen(line);
-        if (len > 0 && line[len - 1] == '\n') {
-            line[len - 1] = '\0';
-        }
-        deq_append(history_deq, line);
+        punteroASesionNueva = deq_append(history_deq, line);
     }
-
     fclose(file);
-}
-
-void cleanup() {
-    save_history();
+    return punteroASesionNueva;
 }
 
 
@@ -149,23 +153,17 @@ int main(void){ //hay que manejar errores tambien
     char *username= pwd->pw_name;
 
 
-
-    struct deq *deque = deq_create();
-
     char input[MAXLINE];
     char* argv[MAXLINE];
     int argc;
     char* respuesta;
 
-    atexit(cleanup);
-
-    history_deq = deque;
-    load_history();
+    history_deq = deq_create();
+    struct deq_elem * punteroAPrimerElDeSesionNueva = load_history();
    
     //int status=0;
 
     while (1){ 
-
         char path[PATH_MAX];
         directorio = getcwd(path, sizeof(path));
 
@@ -180,6 +178,10 @@ int main(void){ //hay que manejar errores tambien
         }
         add_to_history(input);
         argc = linea2argv(input, MAXLINE, argv);
+
+        if(strcmp(argv[0],"exit")==0){
+            save_history(punteroAPrimerElDeSesionNueva);
+        }
 
         if(argc!=0){
             //status=ejecutar(argc,argv);
