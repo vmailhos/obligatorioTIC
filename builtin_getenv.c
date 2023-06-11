@@ -18,7 +18,7 @@ int builtin_getenv (int argc, char ** argv){
         }else{
             //la funcion perror solo puede imprimir un mensaje --> creamos el mensaje de antemano
             char errorMessage[100];
-            sprintf(errorMessage, "%s = error, no fue encontrado\n", variable);
+            sprintf(errorMessage, "getenv %s error\n", variable);
             perror(errorMessage); //nos tira not such file or directory
             return 1; 
         }

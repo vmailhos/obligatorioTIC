@@ -15,6 +15,8 @@ int builtin_unsetenv (int argc, char ** argv){
             sprintf("Error al borrar: %s\n", variable);
             perror(errorMessage);
             return 1;
+        }else{
+            printf("%s unset\n", argv[1]);
         }
     }
     return 0;

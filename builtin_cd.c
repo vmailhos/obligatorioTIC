@@ -15,7 +15,7 @@ int builtin_cd (int argc, char ** argv){
     char *copy_of_PWD; 
 
     if (argc>2){
-        perror("Error, numero incorrecto de argumentos"); //me tira undefined error 0 
+        perror("Error, numero incorrecto de argumentos\n"); //me tira undefined error 0 
         return 1;
     }
 

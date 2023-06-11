@@ -20,8 +20,8 @@
 #define HELP_SETENV  "setenv var valor - agrega o cambia valor de variable de ambiente"
 #define HELP_STATUS  "status - muestra status de retorno de ultimo comando ejecutado"
 #define HELP_UID     "uid - muestra nombre y número de usuario dueño del minish"
-#define HELP_GID     "INFO FALTA GID"
-#define HELP_UNSETENV   "info falta uset env"
+#define HELP_GID     "gid - muestra grupo principal y secundarios"
+#define HELP_UNSETENV   "unsetenv - var [var ...] - elimina variable(s) de ambiente"
 
 #define MAXLINE 1024
 #define PATH_MAX 4096
@@ -57,7 +57,7 @@ struct builtin_struct* builtin_lookup(char *cmd){
 }
 
 void sigint_handler(int sig) {
-    fprintf(stderr, " : ctrlC atrapado: %d\n", sig);
+    fprintf(stderr, "Interrupt! %d\n", sig);
 }
 
 void add_to_history(char* command) {
@@ -98,7 +98,7 @@ struct deq_elem * load_history() {
     const char *home_dir = getenv("HOME");
     if (home_dir == NULL) {
         perror("Error al obtener la variable de entorno HOME");
-        return;
+        return NULL;
     }
     snprintf(filename, sizeof(filename), "%s/%s", home_dir, ".minish_history");
 
@@ -111,7 +111,7 @@ struct deq_elem * load_history() {
         if(file == NULL){
             //SI DIO NULL HUBO UN ERROR
             perror("Error al abrir archivo de history");
-            return;
+            return NULL;
         }
         fclose(file);
         return NULL;

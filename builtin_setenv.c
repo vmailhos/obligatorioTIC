@@ -9,7 +9,7 @@
 
 int builtin_setenv (int argc, char ** argv){
     if(argc!=3){
-        perror("Faltan o sobran argumentos.\n");
+        perror("setenv debe tener solo dos argumentos: variable y valor\n");
         return 1;
     }
     char* variable = argv[1];

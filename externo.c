@@ -43,11 +43,11 @@ int externo (int argc, char ** argv){
         //Proceso hijo termino por una senal
         }else if (WIFSIGNALED(status)) {
             int signal_number = WTERMSIG(status);
-            fprintf(stderr, " : El proceso hijo terminó debido a la señal %d\n", signal_number);
+            fprintf(stderr, " : Hijo recibio señal %d\n", signal_number);
         //Proceso hijo se detuvo por una senal
         } else if (WIFSTOPPED(status)) {
             int signal_number = WTERMSIG(status);
-            fprintf(stderr, " : El proceso hijo se detuvo debido a la señal %d\n", signal_number);
+            fprintf(stderr, " : Hijo recibio señal  %d\n", signal_number);
         }
     }
 

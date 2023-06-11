@@ -19,7 +19,7 @@ int builtin_help (int argc, char ** argv){
         if (builtin != NULL) {
             printf("%s\n", builtin->help_txt);
         } else {
-            perror("Error, no se pudo encontrar el grupo principal"); //nos tira undefined error: 0
+            perror("No se encontro el comando:"); //nos tira undefined error: 0
             return 1;        
             }  
     }
