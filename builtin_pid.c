@@ -10,6 +10,10 @@
 
 //nunca puede retornar null
 int builtin_pid(int argc, char **argv) { 
+
+    (void)argc;
+    (void)argv;
+
     /*if(argc>1){
         perror("Cantidad erronea de argumentos\n");
     } */

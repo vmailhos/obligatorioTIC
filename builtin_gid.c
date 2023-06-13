@@ -13,6 +13,10 @@
 #include "wrappers.h"
 
 int builtin_gid (int argc, char ** argv){
+
+    (void)argc;
+    (void)argv;
+
     gid_t gid_principal = getegid();
     //printf("%d", gid_principal);
     

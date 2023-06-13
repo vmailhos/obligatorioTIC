@@ -12,7 +12,7 @@ int builtin_unsetenv (int argc, char ** argv){
         variable = argv[i];
         if (unsetenv(variable) != 0) {
             char errorMessage[100];
-            sprintf("Error al borrar: %s\n", variable);
+            sprintf(errorMessage, "Error al borrar: %s\n", variable);
             perror(errorMessage);
             return 1;
         }else{

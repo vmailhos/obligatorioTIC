@@ -11,6 +11,7 @@
 //help 
 
 int builtin_help (int argc, char ** argv){
+    (void)argc;
     if (argv[1]== NULL){
         struct builtin_struct* builtin_help = builtin_lookup(argv[0]);;
         printf("%s\n", builtin_help->help_txt);

@@ -6,12 +6,14 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
+#include <sys/wait.h>
 
 #include "minish.h"
 #include "wrappers.h"
 
 //los printf se supone que son errores?
 int externo (int argc, char ** argv){
+    (void)argc;
 
     pid_t pid = fork();
 

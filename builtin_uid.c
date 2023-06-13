@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include <pwd.h>
+#include <unistd.h>
 
 #include "minish.h"
 #include "wrappers.h"
@@ -10,6 +11,10 @@
 //no puede tener errores
 //Uid: 202320, Name: vmailhos, Info = 'Valentina MAILHOS URIOSTE,,,'
 int builtin_uid (int argc, char ** argv){
+    
+    (void)argc;
+    (void)argv;
+    
     uid_t uid = getuid();
     struct passwd *pwd = getpwuid(uid);
     if (pwd==NULL){
