@@ -68,14 +68,14 @@ void save_history(struct deq_elem * structDeq1, struct deq *deque) {
     char filename[FILENAME_MAX];
     const char *home_dir = getenv("HOME");
     if (home_dir == NULL) {
-        perror("Error al obtener la variable de entorno HOME");
+        perror("Error al obtener la variable de entorno HOME\n");
         return;
     }
     snprintf(filename, sizeof(filename), "%s/%s", home_dir, ".minish_history");
 
     FILE *file = fopen(filename, "a");
     if (file == NULL) {
-        perror("Error al abrir archivo de history");
+        perror("Error al abrir archivo de history\n");
         return;
     }
 
@@ -97,7 +97,7 @@ struct deq_elem * load_history() {
     char filename[FILENAME_MAX];
     const char *home_dir = getenv("HOME");
     if (home_dir == NULL) {
-        perror("Error al obtener la variable de entorno HOME");
+        perror("Error al obtener la variable de entorno HOME\n");
         return NULL;
     }
     snprintf(filename, sizeof(filename), "%s/%s", home_dir, ".minish_history");
@@ -110,7 +110,7 @@ struct deq_elem * load_history() {
         file = fopen(filename, "w");
         if(file == NULL){
             //SI DIO NULL HUBO UN ERROR
-            perror("Error al abrir archivo de history");
+            perror("Error al abrir archivo de history\n");
             return NULL;
         }
         fclose(file);
@@ -131,10 +131,17 @@ int main(void){ //hay que manejar errores tambien
     struct sigaction str_sigint_action;
     memset(&str_sigint_action, 0, sizeof(str_sigint_action));
     str_sigint_action.sa_handler = sigint_handler;
-    sigaction(SIGINT, &str_sigint_action, NULL);
+    if(sigaction(SIGINT, &str_sigint_action, NULL)==-1){
+        perror("Error en sigaction\n");
+        return 1;
+    }
 
     uid_t uid = getuid();
     struct passwd *pwd = getpwuid(uid);
+    if (pwd==NULL){
+        perror("Error al encontrar el userID\n");
+        return 1; ///no se si tiene sentido porque en el status no lo estarias agarrando
+    }
     char *username= pwd->pw_name;
 
 
@@ -145,6 +152,10 @@ int main(void){ //hay que manejar errores tambien
 
     history_deq = deq_create();
     struct deq_elem * punteroAPrimerElDeSesionNueva = load_history();
+    if (punteroAPrimerElDeSesionNueva==NULL){
+        perror("Error al encontrar el userID\n");
+        return 1; ///no se si tiene sentido porque en el status no lo estarias agarrando
+    }
    
     //int status=0;
 

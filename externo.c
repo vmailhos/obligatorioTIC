@@ -20,7 +20,7 @@ int externo (int argc, char ** argv){
 
     } else if (pid == 0) {
         execvp(argv[0], argv);
-        perror("execvp error");
+        perror("execvp error\n");
         exit(77);
     } else {
         struct sigaction str_sigint_action_old;

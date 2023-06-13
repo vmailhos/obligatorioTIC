@@ -105,7 +105,7 @@ int filtros(DIR *carpeta, char* filtro){
 
 int builtin_dir (int argc, char ** argv){
     if(argc>3){
-        perror("Error, cantidad de argumentos incorrecta\n");
+        perror("dir: sobran argumentos incorrectos - help dir para más ayuda\n");
         return 1;
     }
 
@@ -115,6 +115,7 @@ int builtin_dir (int argc, char ** argv){
         if (carpeta != NULL) {
             return printEntradas(carpeta);
         }else{      
+            perror("Error al abrir carpeta\n");
             return 1;
         }
     }else if (argc==2){

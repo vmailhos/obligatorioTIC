@@ -12,6 +12,10 @@
 int builtin_uid (int argc, char ** argv){
     uid_t uid = getuid();
     struct passwd *pwd = getpwuid(uid);
+    if (pwd==NULL){
+        perror("Error al encontrar el userID");
+        return 1;
+    }
     printf("Uid: %d, Name: %s, Info: %s\n", uid, pwd->pw_name, pwd->pw_gecos);
     return 0;
 }

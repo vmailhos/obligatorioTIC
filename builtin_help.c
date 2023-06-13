@@ -19,8 +19,11 @@ int builtin_help (int argc, char ** argv){
         if (builtin != NULL) {
             printf("%s\n", builtin->help_txt);
         } else {
-            perror("No se encontro el comando:"); //nos tira undefined error: 0
-            return 1;        
+            char errorMessage[100];
+            sprintf(errorMessage, "No se encontro el comando %s \n",argv[1]);
+            perror(errorMessage);       
+            return 1;
+             //nos tira undefined error: 0     
             }  
     }
     return 0;

@@ -20,7 +20,7 @@ int builtin_history(int argc, char ** argv){
     }else if (argc==2){
         cantidad = atoi(argv[1]);                           //puede tirar error?
     }else{
-        perror("Cantidad de argumentos erronea\n");
+        perror("history: más de 1 argumento - help history\n");
         return 1;
     }
 
