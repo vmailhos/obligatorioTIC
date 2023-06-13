@@ -54,7 +54,6 @@ int linea2argv(char *linea, int argc, char **argv) {
     if (wordcount < argc) {
         argv[wordcount] = NULL;
     }
-
     return wordcount;
 }
 

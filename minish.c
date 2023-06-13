@@ -57,7 +57,7 @@ struct builtin_struct* builtin_lookup(char *cmd){
 }
 
 void sigint_handler(int sig) {
-    fprintf(stderr, "Interrupt! %d\n", sig);
+    fprintf(stderr, " : Interrupt! %d\n", sig);
 }
 
 void add_to_history(char* command) {
@@ -127,6 +127,8 @@ struct deq_elem * load_history() {
 }
 
 
+
+
 int main(void){ //hay que manejar errores tambien
     struct sigaction str_sigint_action;
     memset(&str_sigint_action, 0, sizeof(str_sigint_action));
@@ -168,19 +170,20 @@ int main(void){ //hay que manejar errores tambien
         respuesta = fgets(input, MAXLINE, stdin);
         if(respuesta==NULL){
             if(feof(stdin)){
-                break;
+                save_history(punteroAPrimerElDeSesionNueva, history_deq);
+                argv[0] = "exit";
+                ejecutar(1, argv);
             }
             continue;
         }
-        add_to_history(input);
+
         argc = linea2argv(input, MAXLINE, argv);
 
-        if(strcmp(argv[0],"exit")==0){
-            save_history(punteroAPrimerElDeSesionNueva, history_deq);
-        }
-
         if(argc!=0){
-            //status=ejecutar(argc,argv);
+            add_to_history(input);
+            if(strcmp(argv[0],"exit")==0){
+                save_history(punteroAPrimerElDeSesionNueva, history_deq);
+            }
             ejecutar(argc,argv);
         }
     }
