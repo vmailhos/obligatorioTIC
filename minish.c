@@ -126,7 +126,12 @@ struct deq_elem * load_history() {
     return punteroASesionNueva;
 }
 
-
+void free_argv(int argc, char* argv[]){
+    for(int i=0; i<argc; i++){
+        free(argv[i]);
+        argv[i] = NULL;
+    }
+}
 
 
 int main(void){ //hay que manejar errores tambien
@@ -158,6 +163,7 @@ int main(void){ //hay que manejar errores tambien
     //int status=0;
 
     while (1){ 
+        free_argv(argc, argv);
         char path[PATH_MAX];
         directorio = getcwd(path, sizeof(path));
 
@@ -172,7 +178,6 @@ int main(void){ //hay que manejar errores tambien
             }
             continue;
         }
-
         argc = linea2argv(input, MAXLINE, argv);
 
         char lineaHistory[MAXLINE] = "";
@@ -189,6 +194,7 @@ int main(void){ //hay que manejar errores tambien
             }
             ejecutar(argc,argv);
         }
+        
     }
    
     return 0;    
