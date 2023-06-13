@@ -154,10 +154,6 @@ int main(void){ //hay que manejar errores tambien
 
     history_deq = deq_create();
     struct deq_elem * punteroAPrimerElDeSesionNueva = load_history();
-    if (punteroAPrimerElDeSesionNueva==NULL){
-        perror("Error al encontrar el userID\n");
-        return 1; ///no se si tiene sentido porque en el status no lo estarias agarrando
-    }
    
     //int status=0;
 
@@ -179,8 +175,15 @@ int main(void){ //hay que manejar errores tambien
 
         argc = linea2argv(input, MAXLINE, argv);
 
+        char lineaHistory[MAXLINE] = "";
+        for(int i=0; i< argc; i++){
+            strcat(lineaHistory, argv[i]);
+            strcat(lineaHistory, " ");
+        }
+        strcat(lineaHistory, "\n");
+
         if(argc!=0){
-            add_to_history(input);
+            add_to_history(lineaHistory);
             if(strcmp(argv[0],"exit")==0){
                 save_history(punteroAPrimerElDeSesionNueva, history_deq);
             }
