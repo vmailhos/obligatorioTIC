@@ -16,9 +16,7 @@ int builtin_setenv (int argc, char ** argv){
     char* valor = argv[2];
 
     if (setenv(variable, valor, 1) != 0) {
-        char errorMessage[100];
-        sprintf(errorMessage, "Error al definir: %s\n", variable);
-        fprintf("%s", errorMessage);
+        fprintf(stderr,"Error al definir: %s\n", variable);
         return 1;
     }
     return 0;
