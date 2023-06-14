@@ -1,24 +1,22 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
 #include "minish.h"
 
-//Usa el archivo $HOME/.minish_history (pueden probar crearlo a mano).
-//Si el .minish_history no existe, lo crea.
-//Muestra 10 comandos y si no hay 10 muestra los que haya. Acepta un valor numérico diferente.
-//Mantiene la historia entre llamados al minish.
-
+#define DEFAULT 10
 
 extern struct deq *history_deq;
 
+//Funcion encargada de mostrar las untimas 10 lineas enviadas atravez de la linea de comandos (por defecto).
+//Si se acompana la funcion con un numero entonces se mostrara la cantidad de elementos inicados en el mismo.
+//Recibe dos argumentos, un array de punteros a char y un int indicando su tamano.
 int builtin_history(int argc, char ** argv){
     int cantidad;
 
     if(argc==1){
-        cantidad = 10;
+        cantidad = DEFAULT;              //por defecto
     }else if (argc==2){
-        cantidad = atoi(argv[1]);                           //puede tirar error?
+        cantidad = atoi(argv[1]);
     }else{
         fprintf(stderr,"history: más de 1 argumento - help history\n");
         return 1;

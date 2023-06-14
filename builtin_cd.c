@@ -6,6 +6,7 @@
 #include "minish.h"
 #include "wrappers.h"
 
+//Funciones que manejan errores con perror y fprintf
 int error_file(char *directory){
     char errorMessage[100];
     sprintf(errorMessage, "cd error: chdir %s:\n",directory);
@@ -13,20 +14,19 @@ int error_file(char *directory){
     return 1;
 }
 int error_file1(char *directory){
-    fprintf("%s", "cd error: chdir %s:\n",directory);       
+    fprintf(stderr,"cd error: chdir %s:\n",directory);       
     return 1;
 }
 
-//arreglar sprintf y el main como lo cambio gerardo a mery
-//controlar errores de si te da mas de un argv en todas las funciones
-//no funciona del todo bien a veces cambias de directorio y el anterior se mantiene igual
+
+//Funcion que cambia de directorio, recibe dos argumentos. Un array de punteros a char y un int indicando su tamano.
 int builtin_cd (int argc, char ** argv){
     char *home_dir = getenv("HOME");
     char *next_dir;
     char *copy_of_PWD; 
 
     if (argc>2){
-        fprintf(stderr,"cd: argumentos incorrectos - help cd para más ayuda\n"); //me tira undefined error 0 
+        fprintf(stderr,"cd: argumentos incorrectos - help cd para más ayuda\n"); 
         return 1;
     }
 
@@ -60,7 +60,7 @@ int builtin_cd (int argc, char ** argv){
             fprintf(stderr,"No se pudo cambiar a directorio anterior\n");
             return 1;
         }
-        free(copy_of_PWD);
+        free(copy_of_PWD); // Liberar la memoria asignada para la copia de PWD
     }
     
     else { 
@@ -69,7 +69,7 @@ int builtin_cd (int argc, char ** argv){
         if (chdir(next_dir)==-1) {
             return error_file(next_dir);
         }
-        char absolute_path[1024]; //usar getcwd
+        char absolute_path[1024];
         char *result = realpath(next_dir, absolute_path);
             
         if (result != NULL) {
