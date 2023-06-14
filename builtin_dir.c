@@ -76,7 +76,7 @@ int printEntradas(DIR *carpeta){
         num_files++;
 
         // Se libera 
-        free(info);
+        //-------------->free(info);
     }
         
     // Se hace bubblesort del array
