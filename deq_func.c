@@ -4,6 +4,7 @@
 #include "minish.h"
 #include "wrappers.h"
 
+// Crea una nueva instancia de la deque
 struct deq *deq_create(void) {
     struct deq *deque;
     deque = (struct deq *) malloc_or_exit(sizeof(struct deq));
@@ -13,6 +14,7 @@ struct deq *deq_create(void) {
     return deque;
 }
 
+// Agrega un nuevo elemento al final de la deque
 struct deq_elem *deq_append(struct deq *deque, char *s) {
     struct deq_elem *new_elem;
     new_elem = (struct deq_elem *) malloc_or_exit(sizeof(struct deq_elem));
@@ -33,6 +35,7 @@ struct deq_elem *deq_append(struct deq *deque, char *s) {
     return new_elem;
 }
 
+// Imprime los elementos de la deque
 void deq_print(struct deq *deque){
     int size = deque->count;
     struct deq_elem* nodo1 = deque->leftmost;
