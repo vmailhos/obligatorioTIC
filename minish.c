@@ -140,15 +140,11 @@ int main(void){ //hay que manejar errores tambien
     str_sigint_action.sa_handler = sigint_handler;
     if(sigaction(SIGINT, &str_sigint_action, NULL)==-1){
         perror("Error en sigaction\n");
-        return 1;
+        exit(1);
     }
 
     uid_t uid = getuid();
     struct passwd *pwd = getpwuid(uid);
-    if (pwd==NULL){
-        perror("Error al encontrar el userID\n");
-        return 1; ///no se si tiene sentido porque en el status no lo estarias agarrando
-    }
     char *username= pwd->pw_name;
 
 
