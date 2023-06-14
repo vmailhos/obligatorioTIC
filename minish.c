@@ -25,6 +25,10 @@
 
 #define MAXLINE 1024
 #define PATH_MAX 4096
+#define COLOR_YELLOW "\033[33m"
+#define COLOR_BLUE "\033[34m"
+#define COLOR_GREEN "\033[32m"
+#define COLOR_RESET "\033[0m"
 
 char *directorio = NULL;
 struct deq *history_deq;
@@ -183,7 +187,8 @@ int main(void){
         directorio = getcwd(path, sizeof(path));
 
         //Obtiene el directorio actual
-        fprintf(stdout, "(minish) %s:%s ",username, directorio);
+        //fprintf(stdout, "(minish) %s:%s ",username, directorio);
+        printf("%s(minish) %s:%s %s", COLOR_GREEN, username, directorio, COLOR_RESET);
         //Limpia los errores de entrada estándar
         clearerr(stdin);
         //Lee la entrada del usuario
