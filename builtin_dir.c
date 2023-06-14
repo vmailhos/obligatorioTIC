@@ -105,7 +105,7 @@ int filtros(DIR *carpeta, char* filtro){
 
 int builtin_dir (int argc, char ** argv){
     if(argc>3){
-        perror("dir: sobran argumentos incorrectos - help dir para más ayuda\n");
+        fprintf(stderr,"dir: sobran argumentos incorrectos - help dir para más ayuda\n");
         return 1;
     }
 

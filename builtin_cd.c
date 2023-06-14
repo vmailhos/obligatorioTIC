@@ -22,7 +22,7 @@ int builtin_cd (int argc, char ** argv){
     char *copy_of_PWD; 
 
     if (argc>2){
-        perror("cd: argumentos incorrectos - help cd para más ayuda\n"); //me tira undefined error 0 
+        fprintf(stderr,"cd: argumentos incorrectos - help cd para más ayuda\n"); //me tira undefined error 0 
         return 1;
     }
 
@@ -30,11 +30,11 @@ int builtin_cd (int argc, char ** argv){
     else if (argc==1 && home_dir != NULL){
         setenv("OLDPWD", getenv("PWD"), 1);
         if(chdir(home_dir)==-1){
-            perror("No se pudo cambiar a directorio HOME \n");
+            fprintf(stderr,"No se pudo cambiar a directorio HOME \n");
             return 1;
         }
         if (setenv("PWD", home_dir, 1)==-1){
-            perror("No se pudo cambiar a directorio HOME\n");
+            fprintf(stderr,"No se pudo cambiar a directorio HOME\n");
             return 1;
         }
     }
@@ -44,16 +44,16 @@ int builtin_cd (int argc, char ** argv){
 
         //errores
         if((chdir(getenv("OLDPWD")))==-1){
-            perror("No se pudo cambiar a directorio anterior\n");
+            fprintf(stderr,"No se pudo cambiar a directorio anterior\n");
             return 1;
         }
         copy_of_PWD=strdup_or_exit(getenv("PWD"));
         if (setenv("PWD", getenv("OLDPWD"), 1)==-1){
-            perror("No se pudo cambiar a directorio anterior\n");
+            fprintf(stderr,"No se pudo cambiar a directorio anterior\n");
             return 1;
         }
         if (setenv("OLDPWD", copy_of_PWD, 1)==-1){
-            perror("No se pudo cambiar a directorio anterior\n");
+            fprintf(stderr,"No se pudo cambiar a directorio anterior\n");
             return 1;
         }
         free(copy_of_PWD);

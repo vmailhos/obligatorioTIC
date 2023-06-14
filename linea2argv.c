@@ -25,8 +25,7 @@ int linea2argv(char *linea, int argc, char **argv) {
     char temp[MAXLINE];
 
     while ((c = linea[i]) != '\n') {
-        //printf("%d -> ", i);
-        //printf("%c\n", c);
+        // Si el carácter actual es un espacio o una tabulació
         if (c == ' ' || c == '\t') {
             if (state == IN) {
                 temp[j] = '\0';
@@ -35,6 +34,7 @@ int linea2argv(char *linea, int argc, char **argv) {
                 j = 0;
                 state = OUT;
             }
+        // Si el carácter actual no es un espacio o una tabulación
         } else {
             if (state == OUT) {
                 state = IN;

@@ -68,14 +68,14 @@ void save_history(struct deq_elem * structDeq1, struct deq *deque) {
     char filename[FILENAME_MAX];
     const char *home_dir = getenv("HOME");
     if (home_dir == NULL) {
-        perror("Error al obtener la variable de entorno HOME\n");
+        fprintf(stderr,"Error al obtener la variable de entorno HOME\n");
         return;
     }
     snprintf(filename, sizeof(filename), "%s/%s", home_dir, ".minish_history");
 
     FILE *file = fopen(filename, "a");
     if (file == NULL) {
-        perror("Error al abrir archivo de history\n");
+        fprintf(stderr,"Error al abrir archivo de history\n");
         return;
     }
 
@@ -97,7 +97,7 @@ struct deq_elem * load_history() {
     char filename[FILENAME_MAX];
     const char *home_dir = getenv("HOME");
     if (home_dir == NULL) {
-        perror("Error al obtener la variable de entorno HOME\n");
+        fprintf(stderr,"Error al obtener la variable de entorno HOME\n");
         return NULL;
     }
     snprintf(filename, sizeof(filename), "%s/%s", home_dir, ".minish_history");
@@ -110,7 +110,7 @@ struct deq_elem * load_history() {
         file = fopen(filename, "w");
         if(file == NULL){
             //SI DIO NULL HUBO UN ERROR
-            perror("Error al abrir archivo de history\n");
+            fprintf(stderr,"Error al abrir archivo de history\n");
             return NULL;
         }
         fclose(file);

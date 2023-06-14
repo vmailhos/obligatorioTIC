@@ -8,15 +8,16 @@
 #include "minish.h"
 #include "wrappers.h"
 
-//nunca puede retornar null
 int builtin_pid(int argc, char **argv) { 
 
     (void)argc;
     (void)argv;
 
-    /*if(argc>1){
-        perror("Cantidad erronea de argumentos\n");
-    } */
+    pid_t id = getpid(); // variable para almacenar el function's process id
+    pid_t ppid = getppid(); // variable para almacenar el parent function's process id
+
     printf("pid: %d, ppid: %d\n", getpid(), getppid());
     return 0;
+    // pid y ppid siempre son exitosas (no hay que revisar errores)
+
 }

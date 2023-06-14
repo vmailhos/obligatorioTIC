@@ -12,6 +12,7 @@
 #include "minish.h"
 #include "wrappers.h"
 
+// Función para imprimir información sobre el GID (ID de grupo)
 int builtin_gid (int argc, char ** argv){
 
     (void)argc;
@@ -21,6 +22,7 @@ int builtin_gid (int argc, char ** argv){
     //printf("%d", gid_principal);
     
     struct group *grupo_principal = getgrgid(gid_principal);
+    //Error al encontrar el grupo principal
     if(grupo_principal == NULL){
         perror("Error, no se pudo encontrar el grupo principal"); //nos tira undefined error: 0
         return 1;
@@ -29,11 +31,12 @@ int builtin_gid (int argc, char ** argv){
 
     gid_t groups[NGROUPS_MAX];
     int num_grupos_segundarios = getgroups(NGROUPS_MAX, groups);
-    //printf("%d\n", num_grupos_segundarios);
+    //Error al encontrar los grupos secundarios
     if(num_grupos_segundarios == -1){
         perror("Error, no se pudo encontrar los grupos secundarios"); //nos tira undefined error: 0
         return 1;    }
-
+    
+    //Impresion de los grupos secundarios
     printf( "Groups:");
      for (int i = 0; i < num_grupos_segundarios; i++) {
         struct group *grupo = getgrgid(groups[i]);

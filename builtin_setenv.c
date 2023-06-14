@@ -9,7 +9,7 @@
 
 int builtin_setenv (int argc, char ** argv){
     if(argc!=3){
-        perror("setenv debe tener solo dos argumentos: variable y valor\n");
+        fprintf(stderr,"setenv debe tener solo dos argumentos: variable y valor\n");
         return 1;
     }
     char* variable = argv[1];
@@ -18,7 +18,7 @@ int builtin_setenv (int argc, char ** argv){
     if (setenv(variable, valor, 1) != 0) {
         char errorMessage[100];
         sprintf(errorMessage, "Error al definir: %s\n", variable);
-        perror(errorMessage);
+        fprintf("%s", errorMessage);
         return 1;
     }
     return 0;

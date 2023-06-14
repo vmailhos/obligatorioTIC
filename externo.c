@@ -11,20 +11,24 @@
 #include "minish.h"
 #include "wrappers.h"
 
-//los printf se supone que son errores?
+// Función para ejecutar comandos externos
 int externo (int argc, char ** argv){
     (void)argc;
 
     pid_t pid = fork();
-
+    
+    //Error al crear el proceso hijo con fork()
     if (pid == -1) {
         perror("Error en el fork.\n");
 
+    //Error al ejecutar el comando utilizando execvp()
     } else if (pid == 0) {
         execvp(argv[0], argv);
         perror("execvp error\n");
         exit(77);
+
     } else {
+        //Configuración para manejar la señal SIGINT
         struct sigaction str_sigint_action_old;
         struct sigaction str_sigint_action_new;
         memset(&str_sigint_action_new, 0, sizeof(str_sigint_action_new));
@@ -37,7 +41,7 @@ int externo (int argc, char ** argv){
 
         sigaction(SIGINT, &str_sigint_action_old, NULL);
 
-        //OPCIONES:
+        //Opciones posibles:
         //Proceso hijo termino correctamente
         if (WIFEXITED(status)) {
             int exit_status = WEXITSTATUS(status);
