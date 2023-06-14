@@ -6,18 +6,18 @@
 #include "minish.h"
 #include "wrappers.h"
 
-//si hay error retorna 1, sino retorna 0
+// Función para imprimir el valor de variables de entorno
+// Si hay un error, retorna 1; de lo contrario, retorna 0
 int builtin_getenv (int argc, char ** argv){
     char* variable;
     char* valor;
     for(int i = 1; i<argc; i++){
         variable = argv[i];
-        valor = getenv(variable);
+        valor = getenv(variable); // Obtener el valor de la variable de entorno
         if(valor!=NULL){
-            printf("%s = %s\n", variable, valor);
+            printf("%s = %s\n", variable, valor);// Imprimir la variable y su valor
         }else{
-            //la funcion perror solo puede imprimir un mensaje --> creamos el mensaje de antemano
-            fprintf(stderr, "getenv %s error\n", variable); // nos tira undefined error
+            fprintf(stderr, "getenv %s error\n", variable); 
             return 1; 
         }
     }

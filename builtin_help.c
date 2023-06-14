@@ -26,8 +26,7 @@ int builtin_help (int argc, char ** argv){
         } else {
             fprintf(stderr,"No se encontro el comando %s \n",argv[1]);      
             return 1;
-             //nos tira undefined error: 0     
-            }  
+        }  
     }
     return 0;
 }

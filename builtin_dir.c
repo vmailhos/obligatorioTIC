@@ -13,6 +13,7 @@
 #include "minish.h"
 #include "wrappers.h"
 
+//imprime los permisos de cada archivo
 void printPermisos(mode_t permisos) {
     printf((permisos & S_IRUSR) ? "r" : "-");
     printf((permisos & S_IWUSR) ? "w" : "-");
@@ -25,17 +26,18 @@ void printPermisos(mode_t permisos) {
     printf((permisos & S_IXOTH) ? "x" : "-");
 }
 
+//estructura para guardar status y nombre del file.
 struct FileInfo {
     char* filename;
     struct stat* filestat;
 };
 
-
+//encargado de ordenar el array de file info
 void bubble_sort(struct FileInfo* arr, int size) {
     for (int i = 0; i < size - 1; i++) {
         for (int j = 0; j < size - i - 1; j++) {
             if (strcmp(arr[j].filename, arr[j + 1].filename) > 0) {
-                // Swap elements if they are out of order
+                // Cambiar elementos si estan en el orden incorrecto
                 struct FileInfo temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
@@ -44,6 +46,7 @@ void bubble_sort(struct FileInfo* arr, int size) {
     }
 }
 
+//funcion encargada de imprimir las entradas de un directorio que es recibido como argumento de la funcion.
 int printEntradas(DIR *carpeta){
     struct dirent *entrada;
     struct stat statusCarpeta;
@@ -78,7 +81,7 @@ int printEntradas(DIR *carpeta){
         
     // Se hace bubblesort del array
     bubble_sort(file_info, num_files);
-// Se imprime la informacion necesaria
+    // Se imprime la informacion necesaria
     for (int i = 0; i < num_files; i++) {
                 
         statusCarpeta=*file_info[i].filestat;
@@ -116,6 +119,7 @@ int printEntradas(DIR *carpeta){
     return 0;
 }
 
+//funcion que filtra segun una palabra, solo imprime las entradas de un directorio que contengan la cadena de caracteres.
 int filtros(DIR* carpeta, char* filtro) {
     struct dirent* entrada;
     struct stat statusCarpeta;
@@ -189,13 +193,17 @@ int filtros(DIR* carpeta, char* filtro) {
 
     return 0;
 }
+
+//Funcion que muestra al usario todo lo que hay dentro de un directorio. 
+//Recibe dos argumentos. Un array de punteros a char y un int indicando su tamano.
 int builtin_dir (int argc, char ** argv){
     if(argc>3){
-        perror("dir: sobran argumentos incorrectos - help dir para más ayuda\n");
+        fprintf(stderr,"dir: sobran argumentos incorrectos - help dir para más ayuda\n");
         return 1;
     }
 
     DIR *carpeta;
+    //Si se recibe un solo argumento, se imprimen todos los archivos del directorio corriente
     if(argc==1){
         carpeta = opendir(".");
         if (carpeta != NULL) {
@@ -204,6 +212,8 @@ int builtin_dir (int argc, char ** argv){
             perror("Error al abrir carpeta\n");
             return 1;
         }
+    //Si se reciben dos argumentos, si el segundo argumento es una carpeta, se imprimen los archivos de la misma.  
+    //Si no es una carpeta, se busca dentro del directorio, los archivos que contienen la palabra del segundo argumento
     }else if (argc==2){
         carpeta = opendir(argv[1]);
         if (carpeta != NULL) {
@@ -212,9 +222,13 @@ int builtin_dir (int argc, char ** argv){
             carpeta = opendir(".");
             return filtros(carpeta, argv[1]);
         }
+    //Si se reciben tres argumentos, busca dentro del directorio(primer argumento) los archivos que contienen al segundo argumento en su nombre
     }else{
         carpeta = opendir(argv[1]);
-        if (carpeta == NULL) return 1;
+        if (carpeta == NULL){
+            perror("Error al abrir carpeta\n");
+            return 1;
+        }
         return filtros(carpeta, argv[2]);
     }
     return 0;
