@@ -12,6 +12,10 @@ int error_file(char *directory){
     perror(errorMessage);       
     return 1;
 }
+int error_file1(char *directory){
+    fprintf("%s", "cd error: chdir %s:\n",directory);       
+    return 1;
+}
 
 //arreglar sprintf y el main como lo cambio gerardo a mery
 //controlar errores de si te da mas de un argv en todas las funciones
@@ -44,7 +48,7 @@ int builtin_cd (int argc, char ** argv){
 
         //errores
         if((chdir(getenv("OLDPWD")))==-1){
-            fprintf(stderr,"No se pudo cambiar a directorio anterior\n");
+            perror("No se pudo cambiar a directorio anterior\n");
             return 1;
         }
         copy_of_PWD=strdup_or_exit(getenv("PWD"));
@@ -73,7 +77,7 @@ int builtin_cd (int argc, char ** argv){
             setenv("PWD", absolute_path, 1);
         }
         else {
-            return error_file(next_dir);
+            return error_file1(next_dir);
         }
     }
 

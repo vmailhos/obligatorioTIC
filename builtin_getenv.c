@@ -17,9 +17,7 @@ int builtin_getenv (int argc, char ** argv){
             printf("%s = %s\n", variable, valor);
         }else{
             //la funcion perror solo puede imprimir un mensaje --> creamos el mensaje de antemano
-            char errorMessage[100];
-            sprintf(errorMessage, "getenv %s error\n", variable);
-            fprintf(stderr,"%s", errorMessage); // nos tira undefined error
+            fprintf(stderr, "getenv %s error\n", variable); // nos tira undefined error
             return 1; 
         }
     }

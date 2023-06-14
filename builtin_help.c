@@ -24,9 +24,7 @@ int builtin_help (int argc, char ** argv){
 
         //Caso donde no fue encontrado el nombre del comando, status de retorno 1
         } else {
-            char errorMessage[100];
-            sprintf(errorMessage, "No se encontro el comando %s \n",argv[1]);
-            fprintf(stderr, "%s", errorMessage);      
+            fprintf(stderr,"No se encontro el comando %s \n",argv[1]);      
             return 1;
              //nos tira undefined error: 0     
             }  
