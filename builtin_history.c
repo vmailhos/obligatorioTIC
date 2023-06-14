@@ -7,14 +7,14 @@
 
 extern struct deq *history_deq;
 
-//Funcion encargada de mostrar las untimas 10 lineas enviadas atravez de la linea de comandos (por defecto).
+//Funcion encargada de mostrar las ultimas 10 lineas enviadas atraves de la linea de comandos (por defecto).
 //Si se acompana la funcion con un numero entonces se mostrara la cantidad de elementos inicados en el mismo.
 //Recibe dos argumentos, un array de punteros a char y un int indicando su tamano.
 int builtin_history(int argc, char ** argv){
     int cantidad;
 
     if(argc==1){
-        cantidad = DEFAULT;              //por defecto
+        cantidad = DEFAULT;              //Por defecto
     }else if (argc==2){
         cantidad = atoi(argv[1]);
     }else{
