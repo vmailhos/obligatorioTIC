@@ -16,7 +16,7 @@ int builtin_pid(int argc, char **argv) {
     pid_t id = getpid(); // variable para almacenar el function's process id
     pid_t ppid = getppid(); // variable para almacenar el parent function's process id
 
-    printf("pid: %d, ppid: %d\n", getpid(), getppid());
+    printf("pid: %d, ppid: %d\n", id, ppid);
     return 0;
     // pid y ppid siempre son exitosas (no hay que revisar errores)
 
