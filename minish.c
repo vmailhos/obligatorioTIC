@@ -45,6 +45,7 @@ struct builtin_struct builtin_arr[] = {
     { NULL, NULL, NULL }
 };
 
+//Función que busca un comando interno por su nombre y devuelve su estructura
 struct builtin_struct* builtin_lookup(char *cmd){
     int i = 0;
     while(builtin_arr[i].cmd!=NULL){
@@ -56,14 +57,17 @@ struct builtin_struct* builtin_lookup(char *cmd){
     return NULL; 
 }
 
+//Manejador de la señal SIGINT (Ctrl+C)
 void sigint_handler(int sig) {
     fprintf(stderr, " : Interrupt! %d\n", sig);
 }
 
+//Agrega un comando al historial
 void add_to_history(char* command) {
     deq_append(history_deq, command);
 }
 
+//Guarda el historial en un archivo
 void save_history(struct deq_elem * structDeq1, struct deq *deque) {
     char filename[FILENAME_MAX];
     const char *home_dir = getenv("HOME");
@@ -71,6 +75,8 @@ void save_history(struct deq_elem * structDeq1, struct deq *deque) {
         fprintf(stderr,"Error al obtener la variable de entorno HOME\n");
         return;
     }
+
+    //Construye la ruta completa del archivo de historial
     snprintf(filename, sizeof(filename), "%s/%s", home_dir, ".minish_history");
 
     FILE *file = fopen(filename, "a");
@@ -80,12 +86,17 @@ void save_history(struct deq_elem * structDeq1, struct deq *deque) {
     }
 
     struct deq_elem *elem = structDeq1;
+
+    // Determina el elemento desde donde comenzar a guardar en el archivo
     if(elem==NULL){
+        //Si no se especifica un elemento, se toma el elemento más a la izquierda del deque
         elem = deque->leftmost;
     }else{
+        //Si se especifica un elemento, se toma el siguiente elemento
         elem = elem->next;
     }
 
+    //Escribe cada elemento en el archivo
     while (elem != NULL) {
         fprintf(file, "%s", elem->str);
         elem = elem->next;
@@ -93,6 +104,7 @@ void save_history(struct deq_elem * structDeq1, struct deq *deque) {
     fclose(file);
 }
 
+//Carga el historial desde un archivo
 struct deq_elem * load_history() {
     char filename[FILENAME_MAX];
     const char *home_dir = getenv("HOME");
@@ -100,16 +112,18 @@ struct deq_elem * load_history() {
         fprintf(stderr,"Error al obtener la variable de entorno HOME\n");
         return NULL;
     }
+
+    //Construye la ruta completa del archivo de historial
     snprintf(filename, sizeof(filename), "%s/%s", home_dir, ".minish_history");
 
     struct deq_elem * punteroASesionNueva;
     FILE *file;
     file = fopen(filename, "r");
     if (file == NULL) {
-        //SI DIO NULL PUEDE SER XQ AUN NO FUE CREADO
+        //Si es NULL, es posible que el archivo aún no exista: se crea uno nuevo en modo escritura
         file = fopen(filename, "w");
         if(file == NULL){
-            //SI DIO NULL HUBO UN ERROR
+            //Si no se puede crear el archivo, se muestra un error
             fprintf(stderr,"Error al abrir archivo de history\n");
             return NULL;
         }
@@ -118,14 +132,16 @@ struct deq_elem * load_history() {
     }
 
     char line[MAXLINE];
-
+    //Lee cada línea del archivo y la agrega al historial
     while (fgets(line, MAXLINE, file) != NULL) {
         punteroASesionNueva = deq_append(history_deq, line);
     }
     fclose(file);
+    //Retorna el puntero al primer elemento de la nueva sesión de historial
     return punteroASesionNueva;
 }
 
+// Libera la memoria asignada a los argumentos de la línea de comandos
 void free_argv(int argc, char* argv[]){
     for(int i=0; i<argc; i++){
         free(argv[i]);
@@ -134,9 +150,11 @@ void free_argv(int argc, char* argv[]){
 }
 
 
-int main(void){ //hay que manejar errores tambien
+int main(void){ 
     struct sigaction str_sigint_action;
     memset(&str_sigint_action, 0, sizeof(str_sigint_action));
+    
+    //Establece el manejador de señal para SIGINT
     str_sigint_action.sa_handler = sigint_handler;
     if(sigaction(SIGINT, &str_sigint_action, NULL)==-1){
         perror("Error en sigaction\n");
@@ -156,26 +174,36 @@ int main(void){ //hay que manejar errores tambien
     history_deq = deq_create();
     struct deq_elem * punteroAPrimerElDeSesionNueva = load_history();
    
-    //int status=0;
-
     while (1){ 
+        //Limpia los argumentos anteriores
         free_argv(argc, argv);
+
+        // Obtiene el directorio actual
         char path[PATH_MAX];
         directorio = getcwd(path, sizeof(path));
 
+        //Obtiene el directorio actual
         fprintf(stdout, "(minish) %s:%s ",username, directorio);
+        //Limpia los errores de entrada estándar
         clearerr(stdin);
+        //Lee la entrada del usuario
         respuesta = fgets(input, MAXLINE, stdin);
+        
+        //Verifica si la entrada es nula (EOF)
         if(respuesta==NULL){
             if(feof(stdin)){
+                //Guarda el historial antes de salir
                 save_history(punteroAPrimerElDeSesionNueva, history_deq);
+                //Ejecuta el comando "exit" para finalizar el minish
                 argv[0] = "exit";
                 ejecutar(1, argv);
             }
             continue;
         }
-        argc = linea2argv(input, MAXLINE, argv);
 
+        //Convierte la línea de entrada en argumentos separados
+        argc = linea2argv(input, MAXLINE, argv);
+        //Construye una línea de historial para agregarla al historial
         char lineaHistory[MAXLINE] = "";
         for(int i=0; i< argc; i++){
             strcat(lineaHistory, argv[i]);
@@ -183,11 +211,15 @@ int main(void){ //hay que manejar errores tambien
         }
         strcat(lineaHistory, "\n");
 
+        //Verifica si hay argumentos para ejecutar
         if(argc!=0){
+            //Agrega la línea al historial
             add_to_history(lineaHistory);
+            //Verifica si el comando es "exit" para guardar el historial antes de salir
             if(strcmp(argv[0],"exit")==0){
                 save_history(punteroAPrimerElDeSesionNueva, history_deq);
             }
+            //Ejecuta el comando con los argumentos proporcionados
             ejecutar(argc,argv);
         }
         
