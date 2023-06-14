@@ -14,7 +14,7 @@ int error_file(char *directory){
     return 1;
 }
 int error_file1(char *directory){
-    fprintf(stderr,"cd error: chdir %s:\n",directory);       
+    fprintf(stderr,"cd error: chdir %s:\n",directory);
     return 1;
 }
 

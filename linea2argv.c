@@ -29,31 +29,41 @@ int linea2argv(char *linea, int argc, char **argv) {
         if (c == ' ' || c == '\t') {
             if (state == IN) {
                 temp[j] = '\0';
+                //Almacena la palabra en argv
                 argv[wordcount] = strdup_or_exit(temp);
+                
+                //Incrementa el contador de palabras
                 wordcount++;
-                j = 0;
+                j = 0;  //Reinicia el índice del temporizador
+                //Cambia el estado a OUT (fuera de una palabra)
                 state = OUT;
             }
         // Si el carácter actual no es un espacio o una tabulación
         } else {
             if (state == OUT) {
+                //Cambia el estado a IN (dentro de una palabra)
                 state = IN;
             }
+            //Almacena el carácter en el temporizador
             temp[j] = linea[i];
-            j++;
+            j++;    //Incrementa el índice del temporizador
         }
+        //Incrementa el índice de la línea
         i++;
     }
 
     if (state == IN) {
         temp[j] = '\0';
+        //Almacena la última palabra en argv
         argv[wordcount] = strdup_or_exit(temp);
-        wordcount++;
+        wordcount++;    //Incrementa el contador de palabras
     }
 
     if (wordcount < argc) {
+        //Establece el último elemento de argv a NULL
         argv[wordcount] = NULL;
     }
+    //Devuelve el número de palabras encontradas
     return wordcount;
 }
 
